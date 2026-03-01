@@ -25,6 +25,7 @@ local initialized = false
 local manualVisibility = nil  -- nil = auto, true = force show, false = force hide
 local statsFrame = nil
 local statsLines = {}
+local HideTracker  -- forward declaration
 
 -- ============================================================
 -- Helpers
@@ -420,7 +421,7 @@ end
 -- Slash commands
 -- ============================================================
 
-local function HideTracker()
+HideTracker = function()
     manualVisibility = false
     checkpointsVisited = { false, false, false, false }
     lapStartTime = nil
