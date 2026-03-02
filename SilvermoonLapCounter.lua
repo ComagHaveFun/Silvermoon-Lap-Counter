@@ -11,7 +11,7 @@ local defaultCheckpoints = {
     [4] = { name = "West",  x1 = 0.3950, y1 = 0.7034, x2 = 0.4277, y2 = 0.7035 },
 }
 
-local cpLabels = { "N", "O", "S", "W" }
+local cpLabels = { "N", "E", "S", "W" }
 
 local checkpointsVisited = { false, false, false, false }
 local lapStartTime = nil
@@ -282,7 +282,7 @@ local function CreateMainFrame()
     bestLapText:SetPoint("TOP", 0, -54)
     bestLapText:SetText("Best: --:--")
 
-    -- Checkpoint indicators: N → O → S → W
+    -- Checkpoint indicators: N → E → S → W
     local startX = -48
     for i = 1, 4 do
         local dot = frame:CreateTexture(nil, "OVERLAY")
@@ -382,6 +382,12 @@ local function CheckPosition()
             if mode == "best" or mode == "all" then
                 Print("Lap " .. data.lapCount .. "! NEW BEST: " .. FormatTime(lapTime))
             end
+            if SilvermoonLapCounterDB.guildAnnounce and data.lapCount > 1 and IsInGuild() then
+                SendChatMessage(
+                    "New Silvermoon lap record: " .. FormatTime(lapTime) .. " (Lap " .. data.lapCount .. ")",
+                    "GUILD"
+                )
+            end
         else
             PlaySLC(231913)
             if GetChatMode() == "all" then
@@ -409,8 +415,9 @@ end
 
 local function OnZoneChanged()
     if IsInSilvermoon() then
+        manualVisibility = nil  -- reset auto-visibility on zone enter
         StartTicker()
-        if frame and manualVisibility ~= false then frame:Show() end
+        if frame then frame:Show() end
     else
         StopTicker()
         if frame and manualVisibility ~= true then frame:Hide() end
@@ -460,6 +467,9 @@ local function HandleSlashCommand(msg)
             SilvermoonLapCounterDB.chatMode = "best"
             Print("Chat: best times only (default)")
         end
+    elseif cmd == "guild" then
+        SilvermoonLapCounterDB.guildAnnounce = not SilvermoonLapCounterDB.guildAnnounce
+        Print("Guild announce: " .. (SilvermoonLapCounterDB.guildAnnounce and "ON" or "OFF"))
     elseif cmd == "sound" then
         if SilvermoonLapCounterDB.sound == false then
             SilvermoonLapCounterDB.sound = true
@@ -494,6 +504,7 @@ local function HandleSlashCommand(msg)
         Print("  /slc |cff00ff00hide|r — Hide tracker (anywhere)")
         Print("  /slc |cff00ff00reset|r — Reset laps for current character")
         Print("  /slc |cff00ff00status|r — Show stats in chat")
+        Print("  /slc |cff00ff00guild|r — Toggle guild announce on/off")
         Print("  /slc |cff00ff00sound|r — Toggle sounds on/off")
         Print("  /slc |cff00ff00chat|r — Best times only (default)")
         Print("  /slc |cff00ff00chat all|r — Show checkpoints + all laps")

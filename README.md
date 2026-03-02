@@ -3,7 +3,7 @@ Silvermoon Lap Counter
 
 A World of Warcraft addon that tracks your laps around the Sanctum of Light in Silvermoon City (Midnight).
 
-Race through 4 checkpoints, beat your best time, and compare your results across all your characters.
+Race through four checkpoints, beat your best time, and compare your results across all your characters.
 
 ## How It Works
 
@@ -25,7 +25,7 @@ The route passes through four checkpoint zones arranged around the Sanctum of Li
 └───────────────────────────────────┘
 ```
 
-Ride through all 4 checkpoints in any order to complete a lap. The timer starts when you hit the first checkpoint. Checkpoints light up green in the tracker as you pass through them.
+Ride through all four checkpoints in any order to complete a lap. The timer starts when you hit the first checkpoint. Checkpoints light up green in the tracker as you pass through them.
 
 ## Features
 
@@ -35,6 +35,7 @@ Ride through all 4 checkpoints in any order to complete a lap. The timer starts 
 - **Leaderboard** — click the button to compare laps and best times across all your characters, displayed in class colors
 - **Sounds** — different sounds for checkpoints, lap completion, and new best times (toggle with `/slc sound`)
 - **Movable frame** — drag the tracker anywhere on screen, position is saved
+- **Guild announce** — optionally post new best times to guild chat (off by default, toggle with `/slc guild`)
 - **Quiet by default** — only new best times are shown in chat
 
 ## Slash Commands
@@ -46,6 +47,7 @@ Ride through all 4 checkpoints in any order to complete a lap. The timer starts 
 | `/slc hide` | Hide the tracker (works anywhere) |
 | `/slc reset` | Reset laps and times for the current character |
 | `/slc status` | Print status and all character stats to chat |
+| `/slc guild` | Toggle guild announce for new best times on/off |
 | `/slc sound` | Toggle sounds on/off |
 | `/slc chat` | Chat: best times only (default) |
 | `/slc chat all` | Chat: checkpoints + all lap times |
