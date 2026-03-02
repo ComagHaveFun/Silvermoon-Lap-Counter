@@ -394,6 +394,17 @@ local function CheckPosition()
                 Print("Lap " .. data.lapCount .. ": " .. FormatTime(lapTime))
             end
         end
+        -- Milestone announcements
+        if SilvermoonLapCounterDB.guildAnnounce and IsInGuild() then
+            local count = data.lapCount
+            if count == 100 or count == 1000 or count == 10000 or count == 100000 then
+                SendChatMessage(
+                    "Just completed " .. count .. " laps around Silvermoon City!",
+                    "GUILD"
+                )
+            end
+        end
+
         checkpointsVisited = { false, false, false, false }
         lapStartTime = nil
         UpdateUI()

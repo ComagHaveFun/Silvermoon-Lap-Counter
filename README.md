@@ -35,7 +35,7 @@ Ride through all four checkpoints in any order to complete a lap. The timer star
 - **Leaderboard** — click the button to compare laps and best times across all your characters, displayed in class colors
 - **Sounds** — different sounds for checkpoints, lap completion, and new best times (toggle with `/slc sound`)
 - **Movable frame** — drag the tracker anywhere on screen, position is saved
-- **Guild announce** — optionally post new best times to guild chat (off by default, toggle with `/slc guild`)
+- **Guild announce** — optionally post new best times and lap milestones (100, 1k, 10k, 100k) to guild chat (off by default, toggle with `/slc guild`)
 - **Quiet by default** — only new best times are shown in chat
 
 ## Slash Commands
