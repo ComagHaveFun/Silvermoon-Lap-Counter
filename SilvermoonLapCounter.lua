@@ -14,6 +14,7 @@ local defaultCheckpoints = {
 local cpLabels = { "N", "E", "S", "W" }
 
 local checkpointsVisited = { false, false, false, false }
+local insideCheckpoint = { false, false, false, false }
 local lapStartTime = nil
 local ticker = nil
 local frame = nil
@@ -341,6 +342,7 @@ local function CheckPosition()
     if not IsInLapArea(px, py) then
         if lapStartTime or checkpointsVisited[1] or checkpointsVisited[2] or checkpointsVisited[3] or checkpointsVisited[4] then
             checkpointsVisited = { false, false, false, false }
+            insideCheckpoint = { false, false, false, false }
             lapStartTime = nil
             UpdateUI()
         end
@@ -348,20 +350,19 @@ local function CheckPosition()
     end
 
     for i = 1, 4 do
-        if not checkpointsVisited[i] then
-            local cp = defaultCheckpoints[i]
-            if IsInZone(px, py, cp) then
-                checkpointsVisited[i] = true
-                if not lapStartTime then
-                    lapStartTime = GetTime()
-                end
-
-                if GetChatMode() == "all" then
-                    Print("Checkpoint " .. i .. " (" .. cp.name .. ")")
-                end
-                UpdateUI()
+        local cp = defaultCheckpoints[i]
+        local inZone = IsInZone(px, py, cp)
+        if inZone and not insideCheckpoint[i] and not checkpointsVisited[i] then
+            checkpointsVisited[i] = true
+            if not lapStartTime then
+                lapStartTime = GetTime()
             end
+            if GetChatMode() == "all" then
+                Print("Checkpoint " .. i .. " (" .. cp.name .. ")")
+            end
+            UpdateUI()
         end
+        insideCheckpoint[i] = inZone
     end
 
     if checkpointsVisited[1] and checkpointsVisited[2] and checkpointsVisited[3] and checkpointsVisited[4] then
@@ -406,6 +407,9 @@ local function CheckPosition()
         end
 
         checkpointsVisited = { false, false, false, false }
+        -- Don't reset insideCheckpoint here: player is still standing in the
+        -- last checkpoint zone. Keeping it true prevents ghost-registration
+        -- of that checkpoint on the very next tick for the new lap.
         lapStartTime = nil
         UpdateUI()
         UpdateStatsFrame()
@@ -442,6 +446,7 @@ end
 HideTracker = function()
     manualVisibility = false
     checkpointsVisited = { false, false, false, false }
+    insideCheckpoint = { false, false, false, false }
     lapStartTime = nil
     if frame then frame:Hide() end
     UpdateUI()
@@ -463,6 +468,7 @@ local function HandleSlashCommand(msg)
         data.lastLapTime = nil
         data.bestLapTime = nil
         checkpointsVisited = { false, false, false, false }
+        insideCheckpoint = { false, false, false, false }
         lapStartTime = nil
         UpdateUI()
         Print("Lap counter reset.")
